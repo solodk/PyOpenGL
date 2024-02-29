@@ -1,20 +1,17 @@
 import OpenGL.GL as gl
 import OpenGL.GLU as glu
 import OpenGL.GLUT as glut
+import glfw
 
 from settings import Settings
 from player import Player
-from keyboard import Keyboard
+from input import Input
 
 class Game():
     def __init__(self):
         self.settings = Settings()
-        glut.glutInit()
-        glut.glutInitDisplayMode(glut.GLUT_DOUBLE | glut.GLUT_RGB | glut.GLUT_DEPTH)
-        glut.glutInitWindowSize(self.settings.window_width, self.settings.window_height)
-        self.window = glut.glutCreateWindow(b"Procedural 3D Game with PyOpenGL")
         self.player = Player(self)
-        self.keyboard = Keyboard(self)
+        self.input = Input(self)
 
     def draw_surface(self):
         gl.glBegin(gl.GL_QUADS)
@@ -82,9 +79,9 @@ class Game():
                 0, 1, 0)                                                              # Up vector
         gl.glTranslatef(0.0, 0.0, -3.0)  # Move the cube back along the z-axis
         self.draw_cube()
-        glut.glutSwapBuffers()
+        glfw.swap_buffers(self.window)
 
-    def reshape(self, width, height):
+    def reshape(self, window, width, height):
         gl.glViewport(0, 0, width, height)
         gl.glMatrixMode(gl.GL_PROJECTION)
         gl.glLoadIdentity()
@@ -94,22 +91,22 @@ class Game():
     
     def idle(self):
         self.player.update()
-        glut.glutPostRedisplay() # Request a redraw to continuously update the display
+        glfw.post_empty_event()
     
-    def play(self):        
-        # Movement
-        glut.glutIgnoreKeyRepeat(True)
-        glut.glutKeyboardFunc(self.keyboard.keyboard_callback)
-        glut.glutKeyboardUpFunc(self.keyboard.keyboard_release_callback) #not done
-        glut.glutSpecialFunc(self.keyboard.special_key_callback)
-        #glut.glutSpecialFunc(self.keyboard.special_key_release_callback) #not done
-        #glutMouseFunc(mouse_callback) #not done
-        #glutMotionFunc(motion_callback) #not done
-        
-
+    def play(self):
+        glfw.init()
+        self.window = glfw.create_window(
+            self.settings.window_width, 
+            self.settings.window_height, 
+            "Procedural 3D Game with PyOpenGL", 
+            None, 
+            None)
+        glfw.make_context_current(self.window)
         gl.glClearColor(0.0, 0.0, 0.0, 1.0)
         gl.glEnable(gl.GL_DEPTH_TEST)
-        glut.glutDisplayFunc(self.display)
-        glut.glutReshapeFunc(self.reshape)
-        glut.glutIdleFunc(self.idle) #shoud i keep this?
-        glut.glutMainLoop()
+        glfw.set_key_callback(self.window, self.input.key_callback)
+        glfw.set_window_size_callback(self.window, self.reshape)
+        while not glfw.window_should_close(self.window):
+            self.idle()
+            glfw.poll_events()
+            self.display()
