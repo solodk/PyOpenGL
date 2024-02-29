@@ -13,7 +13,7 @@ class Player():
         self.centerY = 0.0
         self.centerZ = 0.0
         self.vertical_rotation = 0
-        self.horisontal_rotation = 90
+        self.horisontal_rotation = 0
         self.currentMoveSpeed = 0
         self.moveForward = False
         self.moveLeftward = False
@@ -30,21 +30,22 @@ class Player():
             math.radians(self.horisontal_rotation)) + self.eyeZ
     
     def xyzRecalcFunc(self, direction):
-        self.eyeX += self.settings.playerMoveRadius * math.cos(direction)
-        self.eyeZ += self.settings.playerMoveRadius * math.sin(direction)
+        angle = direction + math.radians(self.horisontal_rotation)
+        self.eyeX += self.settings.playerMoveRadius * math.cos(angle)
+        self.eyeZ += self.settings.playerMoveRadius * math.sin(angle)
 
     def update(self):
         dx = 0
         dy = 0
 
         if self.moveForward:
-            dy += 1
-        if self.moveLeftward:
             dx += 1
-        if self.moveRightward:
-            dx -= 1
-        if self.moveBackward:
+        if self.moveLeftward:
             dy -= 1
+        if self.moveRightward:
+            dy += 1
+        if self.moveBackward:
+            dx -= 1
 
         if dx or dy:
             angle = math.atan2(dy, dx)
