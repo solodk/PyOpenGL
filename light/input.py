@@ -13,37 +13,45 @@ class Input():
 
         if key == glfw.KEY_W:
             if action == glfw.PRESS:
-                self.player.moveForward = True
+                #self.player.moveForward = True
+                self.player.eyeX += self.settings.playerMoveSpeed
+                #self.player.centerX += self.settings.playerMoveSpeed
                 print(f'Key {key} pressed') #debug
             elif action == glfw.RELEASE:
-                self.player.moveForward = False
+                #self.player.moveForward = False
                 print(f'Key {key} released') #debug
         elif key == glfw.KEY_S:
             if action == glfw.PRESS:
-                self.player.moveBackward = True
+                #self.player.moveBackward = True
+                self.player.eyeX -= self.settings.playerMoveSpeed
+                #self.player.centerX -= self.settings.playerMoveSpeed
                 print(f'Key {key} pressed') #debug
             elif action == glfw.RELEASE:
-                self.player.moveBackward = False
+                #self.player.moveBackward = False
                 print(f'Key {key} released') #debug
         elif key == glfw.KEY_A:
             if action == glfw.PRESS:
-                self.player.moveLeftward = True
+                self.player.eyeZ -= self.settings.playerMoveSpeed
+                #self.player.centerZ -= self.settings.playerMoveSpeed
+                #self.player.moveLeftward = True
                 print(f'Key {key} pressed') #debug
             elif action == glfw.RELEASE:
                 self.player.moveLeftward = False
                 print(f'Key {key} released') #debug
         elif key == glfw.KEY_D:
             if action == glfw.PRESS:
-                self.player.moveRightward = True
+                #self.player.moveRightward = True
+                self.player.eyeZ += self.settings.playerMoveSpeed
+                #self.player.centerZ += self.settings.playerMoveSpeed
                 print(f'Key {key} pressed') #debug
             elif action == glfw.RELEASE:
                 self.player.moveRightward = False
                 print(f'Key {key} released') #debug
         elif key == glfw.KEY_UP:
-            self.player.centerY += self.settings.playerVerticalViewSpeed
+            self.player.centerY += 0.1
             print(f'Key {key} pressed') #debug
         elif key == glfw.KEY_DOWN:
-            self.player.centerY -= self.settings.playerVerticalViewSpeed
+            self.player.centerY -= 0.1
             print(f'Key {key} pressed') #debug
         elif key == glfw.KEY_LEFT:
             self.player.horisontal_rotation -= self.settings.playerHorizontalViewSpeed

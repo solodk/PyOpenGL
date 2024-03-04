@@ -5,7 +5,7 @@ class Settings():
         self.window_height = 400
         self.zNear = 0.1
         self.zFar = 10
-        self.playerMoveSpeed = 0.025
+        self.playerMoveSpeed = 0.1
         self.playerViewRadius = self.playerMoveSpeed
         self.playerAcceleration = 0.001
         self.playerHorizontalViewSpeed = 5
