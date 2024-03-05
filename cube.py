@@ -9,7 +9,7 @@ class Cube():
     def draw(self):
         glPushMatrix()
 
-        #glColor3f(*self.color)
+        glColor3f(*self.color)
         
         # Front face
         glBegin(GL_QUADS)

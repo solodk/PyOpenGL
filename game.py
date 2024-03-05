@@ -22,7 +22,12 @@ class Game():
         gluLookAt(self.player.eyeX, self.player.eyeY, self.player.eyeZ,           # Eye position
                 self.player.centerX, self.player.centerY, self.player.centerZ,        # Center position (looking at)
                 0, 1, 0)                                                              # Up vector
-        
+        light_pos = (1.0, 1.0, 1.0, 1.0)
+        glLightfv(GL_LIGHT0, GL_POSITION, light_pos)  # Set light position
+        glLightfv(GL_LIGHT0, GL_AMBIENT, (0.2, 0.2, 0.2, 1.0))   # Set ambient light
+        glLightfv(GL_LIGHT0, GL_DIFFUSE, (1.0, 1.0, 1.0, 1.0))   # Set diffuse light
+        glLightfv(GL_LIGHT0, GL_SPECULAR, (1.0, 1.0, 1.0, 1.0))  # Set specular light
+
         self.surface.draw()
         self.cube.draw()
 
@@ -39,17 +44,6 @@ class Game():
     def idle(self):
         self.player.update()
         glfw.post_empty_event()
-    
-    def init_light(self):
-        glEnable(GL_LIGHTING)     # Enable lighting calculations
-        glEnable(GL_LIGHT0)      # Enable light source 0
-
-        # Set light position and properties
-        light_pos = (1.0, 1.0, 1.0, 1.0)
-        glLightfv(GL_LIGHT0, GL_POSITION, light_pos)  # Set light position
-        glLightfv(GL_LIGHT0, GL_AMBIENT, (0.2, 0.2, 0.2, 1.0))   # Set ambient light
-        glLightfv(GL_LIGHT0, GL_DIFFUSE, (1.0, 1.0, 1.0, 1.0))   # Set diffuse light
-        glLightfv(GL_LIGHT0, GL_SPECULAR, (1.0, 1.0, 1.0, 1.0))  # Set specular light
 
     def play(self):
         glfw.init()
@@ -65,7 +59,10 @@ class Game():
 
         glClearColor(0.0, 0.0, 0.0, 1.0)
         glEnable(GL_DEPTH_TEST)
-        self.init_light()
+        glEnable(GL_LIGHTING)
+        glEnable(GL_LIGHT0)
+        glEnable(GL_COLOR_MATERIAL)               # Enable per-vertex color tracking
+        glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE)  # Set material to track
 
         glfw.set_key_callback(self.window, self.input.key_callback)
         glfw.set_input_mode(self.window, glfw.CURSOR, glfw.CURSOR_DISABLED)
